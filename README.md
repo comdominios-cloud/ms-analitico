@@ -7,6 +7,8 @@ catalogo de **AWS Glue** y expone los resultados como API REST.
 
 ## Responsable
 
+[@carloscondor1610](https://github.com/carloscondor1610) — Data Science. Ver [INTEGRANTE.md](INTEGRANTE.md).
+
 Integrante a cargo de **data science**. Trabaja junto con el repositorio
 [`ingesta-datos`](../ingesta-datos), que es el que alimenta el bucket S3 sobre el
 que corre Athena.
