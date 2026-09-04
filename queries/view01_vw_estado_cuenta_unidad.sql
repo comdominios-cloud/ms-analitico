@@ -1,0 +1,23 @@
+-- ============================================================
+-- ms-analitico | Vista 1: vw_estado_cuenta_unidad
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Una fila por unidad con su edificio, total emitido, total pagado, saldo
+--   pendiente y cantidad de cuotas vencidas. Sirve de base para los tableros
+--   del frontend y para la consulta 1.
+--
+-- CREATE OR REPLACE VIEW condominio_db.vw_estado_cuenta_unidad AS
+-- SELECT
+--     u.id            AS unidad_id,
+--     u.codigo        AS unidad,
+--     e.nombre        AS edificio,
+--     ...
+-- FROM condominio_db.unidades u
+-- JOIN condominio_db.edificios e ON e.id = u.edificio_id
+-- LEFT JOIN condominio_db.cuotas c ON c.unidad_id = u.id
+-- LEFT JOIN condominio_db.pagos  p ON p.cuota_id  = c.id
+-- GROUP BY u.id, u.codigo, e.nombre;
+
+SELECT 1;  -- TODO: reemplazar por el CREATE VIEW real

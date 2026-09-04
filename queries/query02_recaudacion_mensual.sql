@@ -1,0 +1,25 @@
+-- ============================================================
+-- ms-analitico | Consulta 2: recaudacion mensual
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Comparar, mes a mes, el monto emitido en cuotas contra el monto
+--   efectivamente cobrado, y calcular el porcentaje de cobranza.
+--
+-- Tablas: cuotas, pagos
+-- Salida esperada:
+--   periodo | monto_emitido | monto_cobrado | pct_cobranza
+--
+-- Esqueleto:
+-- SELECT
+--     c.periodo,
+--     SUM(c.monto)         AS monto_emitido,
+--     SUM(p.monto_pagado)  AS monto_cobrado,
+--     ...
+-- FROM condominio_db.cuotas c
+-- LEFT JOIN condominio_db.pagos p ON p.cuota_id = c.id
+-- GROUP BY c.periodo
+-- ORDER BY c.periodo;
+
+SELECT 1;  -- TODO: reemplazar por la consulta real

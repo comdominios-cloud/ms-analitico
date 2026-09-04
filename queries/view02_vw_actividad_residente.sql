@@ -1,0 +1,25 @@
+-- ============================================================
+-- ms-analitico | Vista 2: vw_actividad_residente
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Una fila por residente cruzando las tres fuentes: cuantos pagos hizo,
+--   cuantas incidencias reporto y cuantas reservas realizo. Es la version
+--   analitica (batch) de lo que ms-ficha-residente resuelve en linea.
+--
+-- CREATE OR REPLACE VIEW condominio_db.vw_actividad_residente AS
+-- SELECT
+--     r.id          AS residente_id,
+--     r.nombres,
+--     r.apellidos,
+--     u.codigo      AS unidad,
+--     ...
+-- FROM condominio_db.residentes r
+-- JOIN condominio_db.unidades u ON u.id = r.unidad_id
+-- LEFT JOIN condominio_db.pagos       p ON ...
+-- LEFT JOIN condominio_db.incidencias i ON i.residente_id = r.id
+-- LEFT JOIN condominio_db.reservas    v ON v.residente_id = r.id
+-- GROUP BY r.id, r.nombres, r.apellidos, u.codigo;
+
+SELECT 1;  -- TODO: reemplazar por el CREATE VIEW real

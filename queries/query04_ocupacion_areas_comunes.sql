@@ -1,0 +1,23 @@
+-- ============================================================
+-- ms-analitico | Consulta 4: ocupacion de areas comunes
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Que areas comunes se usan mas, en que dia de la semana y franja horaria,
+--   y que porcentaje de reservas termina cancelado.
+--
+-- Tablas: reservas (JSON), unidades, edificios
+-- Salida esperada:
+--   area_comun | dia_semana | franja | total_reservas | pct_canceladas
+--
+-- Esqueleto:
+-- SELECT
+--     r.area_comun,
+--     day_of_week(from_iso8601_timestamp(r.fecha_inicio)) AS dia_semana,
+--     ...
+-- FROM condominio_db.reservas r
+-- GROUP BY r.area_comun, ...
+-- ORDER BY total_reservas DESC;
+
+SELECT 1;  -- TODO: reemplazar por la consulta real

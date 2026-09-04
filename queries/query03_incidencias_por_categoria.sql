@@ -1,0 +1,25 @@
+-- ============================================================
+-- ms-analitico | Consulta 3: incidencias por categoria
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Cuantas incidencias se reportan por categoria y prioridad, y cuanto
+--   tarda en promedio pasar de ABIERTA a RESUELTA.
+--
+-- Tablas: incidencias (JSON), unidades, edificios
+-- Salida esperada:
+--   categoria | prioridad | total | abiertas | dias_promedio_resolucion
+--
+-- Esqueleto:
+-- SELECT
+--     i.categoria,
+--     i.prioridad,
+--     COUNT(*) AS total,
+--     ...
+-- FROM condominio_db.incidencias i
+-- LEFT JOIN condominio_db.unidades u ON u.id = i.unidad_id
+-- GROUP BY i.categoria, i.prioridad
+-- ORDER BY total DESC;
+
+SELECT 1;  -- TODO: reemplazar por la consulta real

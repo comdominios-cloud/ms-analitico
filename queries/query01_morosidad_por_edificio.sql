@@ -1,0 +1,26 @@
+-- ============================================================
+-- ms-analitico | Consulta 1: morosidad por edificio
+-- PLACEHOLDER: completar cuando exista el catalogo de Glue.
+-- ============================================================
+--
+-- Objetivo:
+--   Por cada edificio, cuanta deuda acumulada hay y que porcentaje de las
+--   unidades tiene al menos una cuota vencida.
+--
+-- Tablas: edificios, unidades, cuotas, pagos
+-- Salida esperada:
+--   edificio | unidades_totales | unidades_morosas | deuda_total | tasa_morosidad
+--
+-- Esqueleto:
+-- SELECT
+--     e.nombre AS edificio,
+--     ...
+-- FROM condominio_db.edificios e
+-- JOIN condominio_db.unidades u ON u.edificio_id = e.id
+-- LEFT JOIN condominio_db.cuotas c ON c.unidad_id = u.id
+-- LEFT JOIN condominio_db.pagos p ON p.cuota_id = c.id
+-- WHERE ...
+-- GROUP BY e.nombre
+-- ORDER BY deuda_total DESC;
+
+SELECT 1;  -- TODO: reemplazar por la consulta real
