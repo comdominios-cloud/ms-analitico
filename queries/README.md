@@ -10,8 +10,8 @@ Provienen de los 3 contenedores de ingesta:
 
 | Tabla de Glue | Origen | Formato en S3 |
 |---------------|--------|---------------|
-| `edificios`, `unidades`, `residentes` | ms-residentes (MySQL) | CSV |
-| `cuotas`, `pagos` | ms-pagos (PostgreSQL) | CSV |
+| `edificios`, `unidades`, `residentes`, `usuarios` | ms-residentes (PostgreSQL) | CSV |
+| `cuotas`, `pagos` | ms-pagos (MySQL) | CSV |
 | `incidencias`, `reservas` | ms-incidencias (MongoDB) | JSON |
 
 ## Contenido
@@ -22,6 +22,7 @@ Provienen de los 3 contenedores de ingesta:
 | `query02_recaudacion_mensual.sql` | consulta | Recaudacion mes a mes y comparativa con lo emitido |
 | `query03_incidencias_por_categoria.sql` | consulta | Volumen y tiempo de resolucion de incidencias por categoria |
 | `query04_ocupacion_areas_comunes.sql` | consulta | Uso de las areas comunes por franja horaria |
+| `query05_prediccion_area_comun.sql` | consulta | **Que area comun sera la mas visitada el proximo mes** (pedido del ACL) |
 | `view01_vw_estado_cuenta_unidad.sql` | vista | Estado de cuenta consolidado por unidad |
 | `view02_vw_actividad_residente.sql` | vista | Actividad de cada residente (pagos + incidencias + reservas) |
 

@@ -29,7 +29,7 @@ MySQL / PostgreSQL / MongoDB
     AWS Glue Data Catalog
         │
         ▼  (SQL)
-    AWS Athena ──> ms-analitico (8005) ──> API Gateway ──> web-condominio
+    AWS Athena ──> ms-analitico :9005 ──> balanceador ──> web-condominio
 ```
 
 Responde preguntas que ninguna API transaccional puede responder sola, porque
@@ -51,16 +51,19 @@ por categoria y ocupacion de areas comunes.
 
 ## Puerto asignado
 
-**8005**
+**9005** publicado · **8005** dentro del contenedor.
 
-| Microservicio       | Puerto |
-|---------------------|--------|
-| ms-residentes       | 8001   |
-| ms-pagos            | 8002   |
-| ms-incidencias      | 8003   |
-| ms-ficha-residente  | 8004   |
-| ms-analitico        | **8005** |
-| web-condominio (dev)| 5173   |
+El curso asigno el rango **9000-12000** para los microservicios; ese es el puerto
+que se habilita en el Security Group.
+
+| Microservicio | Publicado | Interno |
+|---------------|-----------|---------|
+| ms-residentes | 9001      | 8000    |
+| ms-pagos      | 9002      | 8080    |
+| ms-incidencias| 9003      | 3003    |
+| ms-ficha-residente | 9004 | 8004    |
+| ms-analitico  | **9005**  | 8005    |
+| web-condominio (dev) | 5173 | —     |
 
 ## Endpoints REST planificados
 
@@ -73,6 +76,7 @@ por categoria y ocupacion de areas comunes.
 | 2 | `GET` | `/analitica/recaudacion-mensual?desde=&hasta=` | `query02_recaudacion_mensual.sql` | **frontend** |
 | 3 | `GET` | `/analitica/incidencias-por-categoria` | `query03_incidencias_por_categoria.sql` | frontend |
 | 4 | `GET` | `/analitica/ocupacion-areas-comunes` | `query04_ocupacion_areas_comunes.sql` | frontend |
+| 4b | `GET` | `/analitica/prediccion-area-comun` | `query05_prediccion_area_comun.sql` | frontend |
 | 5 | `POST`| `/athena/consultas` | Lanza una consulta y devuelve su `queryExecutionId` | frontend |
 | 6 | `GET` | `/athena/consultas/{execution_id}` | Estado y resultados de una consulta lanzada | frontend |
 | 7 | `GET` | `/health` | Health check del servicio | infra |
@@ -80,12 +84,14 @@ por categoria y ocupacion de areas comunes.
 Los dos endpoints que consume directamente el **frontend** son
 `GET /analitica/morosidad-por-edificio` y `GET /analitica/recaudacion-mensual`.
 
-Documentacion interactiva: `http://localhost:8005/docs` (Swagger-UI).
+Documentacion interactiva: `http://<ip-vm-produccion>:9005/docs` (Swagger-UI).
 
 ## Consultas y vistas
 
 En [`queries/`](queries/) estan los placeholders de las **4 consultas** y las
-**2 vistas** de Athena exigidas por el curso. Detalle en
+**2 vistas** de Athena exigidas por el curso, mas una **quinta consulta** que
+pidio el ACL: predecir que area comun sera la mas visitada el proximo mes, a
+partir de la tendencia de reservas. Detalle en
 [queries/README.md](queries/README.md).
 
 ## Variables de entorno
@@ -96,7 +102,8 @@ ni credenciales de AWS.
 | Variable | Descripcion | Ejemplo |
 |----------|-------------|---------|
 | `APP_NAME` | Nombre del servicio | `ms-analitico` |
-| `APP_PORT` | Puerto de escucha | `8005` |
+| `APP_PORT` | Puerto dentro del contenedor | `8005` |
+| `PUBLISHED_PORT` | Puerto publicado en la VM | `9005` |
 | `APP_ENV` | Entorno de ejecucion | `development` / `production` |
 | `LOG_LEVEL` | Nivel de logging | `info` |
 | `AWS_REGION` | Region de AWS | `us-east-1` |
@@ -119,18 +126,18 @@ ni credenciales de AWS.
 ```bash
 cp .env.example .env      # completar region, buckets y credenciales
 docker build -t ms-analitico .
-docker run --rm -p 8005:8005 --env-file .env ms-analitico
+docker run --rm -p 9005:8005 --env-file .env ms-analitico
 ```
 
-Luego abrir `http://localhost:8005/docs`.
+Luego abrir `http://localhost:9005/docs`.
 
-### En la EC2 (docker compose del proyecto)
+### En la VM de produccion
 
 ```yaml
 services:
   ms-analitico:
-    build: .
-    ports: ["8005:8005"]
+    image: <usuario>/ms-analitico:0.1.0
+    ports: ["9005:8005"]
     env_file: .env
 ```
 
@@ -148,7 +155,7 @@ app/
 ├── schemas/      # esquemas Pydantic de las respuestas
 └── config/       # settings de AWS, Glue y Athena
 queries/
-├── query01..query04_*.sql   # 4 consultas (placeholders)
+├── query01..query05_*.sql   # 5 consultas (placeholders)
 └── view01..view02_*.sql     # 2 vistas de Athena (placeholders)
 tests/
 ```
