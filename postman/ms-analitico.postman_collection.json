@@ -1,0 +1,363 @@
+{
+  "info": {
+    "name": "ms-analitico | CS2032 Condominios",
+    "description": "Microservicio analitico: ejecuta consultas SQL sobre AWS Athena usando el\ncatalogo de AWS Glue construido sobre los archivos que ingesta-datos deja\nen S3.\n\nResponde preguntas que cruzan las TRES bases del proyecto (PostgreSQL,\nMySQL y MongoDB), algo que ningun microservicio transaccional puede hacer\nsolo, porque cada uno tiene su base separada.\n\nEmpezar por '0. Catalogo' para ver que consultas hay disponibles.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9005",
+      "description": "Cambiar por la URL del API Gateway al desplegar"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Catalogo",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Informa tambien si Athena esta configurado. El servicio puede estar sano y aun asi no poder consultar."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultas y vistas disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica"
+              ]
+            },
+            "description": "No ejecuta nada en Athena: solo lista que hay."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ver el SQL de una consulta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/sql/prediccion-area-comun",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "sql",
+                "prediccion-area-comun"
+              ]
+            },
+            "description": "Devuelve el SQL sin ejecutarlo. Util para mostrar en la demo que consulta se esta corriendo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Las 4 consultas del enunciado",
+      "item": [
+        {
+          "name": "Morosidad por edificio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/morosidad-por-edificio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "morosidad-por-edificio"
+              ]
+            },
+            "description": "Une 4 tablas: edificios y unidades (PostgreSQL) con cuotas y pagos (MySQL)."
+          }
+        },
+        {
+          "name": "Recaudacion mensual",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/recaudacion-mensual",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "recaudacion-mensual"
+              ]
+            },
+            "description": "Emitido contra cobrado, mes a mes."
+          }
+        },
+        {
+          "name": "Incidencias por categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/incidencias-por-categoria",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "incidencias-por-categoria"
+              ]
+            },
+            "description": "Cruza incidencias (MongoDB) con unidades y edificios (PostgreSQL)."
+          }
+        },
+        {
+          "name": "Ocupacion de areas comunes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/ocupacion-areas-comunes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "ocupacion-areas-comunes"
+              ]
+            },
+            "description": "Uso por dia de la semana y porcentaje de cancelaciones."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Prediccion (pedido del ACL)",
+      "item": [
+        {
+          "name": "Area comun mas visitada el proximo mes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/prediccion-area-comun",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "prediccion-area-comun"
+              ]
+            },
+            "description": "Tendencia de reservas con funciones de ventana: promedio movil de 3 meses mas la variacion contra el mes anterior."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Vistas",
+      "item": [
+        {
+          "name": "Crear vw_estado_cuenta_unidad",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/vistas/vw_estado_cuenta_unidad",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "vistas",
+                "vw_estado_cuenta_unidad"
+              ]
+            },
+            "description": "Crea la vista en Athena. Una fila por unidad con su saldo."
+          }
+        },
+        {
+          "name": "Crear vw_actividad_residente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/vistas/vw_actividad_residente",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "vistas",
+                "vw_actividad_residente"
+              ]
+            },
+            "description": "Crea la vista que cruza las tres bases por residente."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Ejecucion asincronica",
+      "item": [
+        {
+          "name": "Lanzar consulta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/athena/consultas?nombre=morosidad-por-edificio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "athena",
+                "consultas"
+              ],
+              "query": [
+                {
+                  "key": "nombre",
+                  "value": "morosidad-por-edificio"
+                }
+              ]
+            },
+            "description": "Devuelve el execution_id sin esperar. Para consultas largas."
+          }
+        },
+        {
+          "name": "Resultado de la consulta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/athena/consultas/REEMPLAZAR-POR-EL-ID",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "athena",
+                "consultas",
+                "REEMPLAZAR-POR-EL-ID"
+              ]
+            },
+            "description": "Pegar el execution_id del request anterior."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Casos de error",
+      "item": [
+        {
+          "name": "Consulta inexistente -> 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/sql/noexiste",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "sql",
+                "noexiste"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Vista inexistente -> 404",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analitica/vistas/noexiste",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analitica",
+                "vistas",
+                "noexiste"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Responde 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
