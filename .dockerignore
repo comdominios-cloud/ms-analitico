@@ -1,0 +1,19 @@
+# Igual que .gitignore, pero para el build de Docker.
+# Sin esto, `COPY . .` mete el .env con credenciales DENTRO de la imagen.
+
+.env
+.env.*
+
+.git
+.gitignore
+.dockerignore
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+postman/
+tests/
+*.md
+docker-compose*.yml

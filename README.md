@@ -67,9 +67,6 @@ que se habilita en el Security Group.
 
 ## Endpoints REST planificados
 
-> Andamiaje: aun no implementados. Cada endpoint corresponde a un archivo de
-> [`queries/`](queries/).
-
 | # | Metodo | Ruta | Consulta que ejecuta | Consumido por |
 |---|--------|------|----------------------|---------------|
 | 1 | `GET` | `/analitica/morosidad-por-edificio` | `query01_morosidad_por_edificio.sql` | **frontend** |
@@ -160,7 +157,19 @@ queries/
 tests/
 ```
 
+## Coleccion de Postman
+
+[postman/ms-analitico.postman_collection.json](postman/ms-analitico.postman_collection.json),
+14 requests. Empezar por **`0. Catalogo`** para ver que consultas hay sin
+ejecutar nada en Athena.
+
 ## Estado
 
-Andamiaje inicial. Sin endpoints, sin cliente de Athena y con las consultas SQL
-como placeholders.
+**Implementado y probado.** Las 5 consultas y las 2 vistas escritas y listas
+para ejecutar, el cliente de Athena completo (lanzar, esperar, paginar
+resultados) y 12 endpoints funcionando. Imagen publicada como
+`osomar/ms-analitico:0.1.0`.
+
+Pendiente de la infraestructura: que exista el catalogo de Glue sobre el bucket
+S3. Hasta entonces los endpoints analiticos responden **503** con un mensaje
+claro, en vez de un error opaco.

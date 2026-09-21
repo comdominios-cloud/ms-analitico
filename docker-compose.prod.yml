@@ -1,0 +1,22 @@
+# Despliegue en la VM de PRODUCCION.
+#
+# Este microservicio no tiene base de datos: consulta Athena sobre el catalogo
+# de Glue. Necesita permisos de AWS sobre Athena, Glue y S3.
+#
+#   docker compose -f docker-compose.prod.yml pull
+#   docker compose -f docker-compose.prod.yml up -d
+
+services:
+  ms-analitico:
+    image: osomar/ms-analitico:0.1.0
+    container_name: ms-analitico
+    ports:
+      - "9005:8005"
+    env_file: .env
+    restart: unless-stopped
+
+# Las credenciales de AWS: en una cuenta normal se usaria un IAM Role adjunto a
+# la instancia. En AWS Academy el rol del laboratorio no siempre alcanza, asi
+# que se pasan por .env las credenciales temporales del lab
+# (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN), que vencen al
+# cerrar la sesion y hay que renovar.
